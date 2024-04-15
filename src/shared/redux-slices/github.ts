@@ -1,5 +1,5 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { IRepo } from '../../models/models';
+import { IRepo } from '../../entities/repo/Repo';
 
 const LS_FAV_KEY = 'redux-repo-favorite-urls-key';
 

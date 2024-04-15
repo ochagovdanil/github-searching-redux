@@ -1,23 +1,23 @@
 import { useEffect, useState } from 'react';
-import { useDebounce } from '../hooks/debounce';
-import { IRepo, IUser } from '../models/models';
+import { IUser } from '../entities/user/User';
 import {
 	useLazyGetRepoByUsernameQuery,
 	useSearchUsersQuery,
-} from '../store/github/github.api';
-import RepoCard from '../components/RepoCard';
+} from '../shared/api/github';
+import { useDebounce } from '../shared/hooks/debounce';
+import RepoList from '../widgets/home/RepoList';
 
 export default function HomePage() {
-	const [search, setSearch] = useState<string>(''); // username search input
-	const [isDropdownShown, setIsDropdownShown] = useState<boolean>(false);
+	const [fetchRepos, { isLoading: isReposLoading, data: repos }] =
+		useLazyGetRepoByUsernameQuery();
 
+	const [isDropdownShown, setIsDropdownShown] = useState<boolean>(false);
+	const [search, setSearch] = useState<string>(''); // username search input
 	const debounced = useDebounce(search); // delay searching process
 
 	const { isLoading, isError, data } = useSearchUsersQuery(debounced, {
 		skip: debounced.length < 3, // skip request if this condition is faced
 	}); // returns users
-	const [fetchRepos, { isLoading: isReposLoading, data: repos }] =
-		useLazyGetRepoByUsernameQuery();
 
 	useEffect(() => {
 		setIsDropdownShown(debounced.length > 3 && data?.length! > 0); // show/hide dropdown menu
@@ -66,11 +66,7 @@ export default function HomePage() {
 			{isReposLoading && (
 				<p className='italic text-center'>Repos are loading...</p>
 			)}
-			<div className='text-center mb-10'>
-				{repos?.map((repo: IRepo, index: number) => {
-					return <RepoCard key={index} repo={repo} />;
-				})}
-			</div>
+			<RepoList repos={repos} />
 		</div>
 	);
 }

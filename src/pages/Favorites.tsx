@@ -1,6 +1,6 @@
-import FavoriteCard from '../components/FavoriteCard';
-import { useAppSelector } from '../hooks/redux';
-import { IRepo } from '../models/models';
+import { IRepo } from '../entities/repo/Repo';
+import { useAppSelector } from '../shared/hooks/redux';
+import FavoriteList from '../widgets/favorite-repos/FavoriteList';
 
 export default function FavoritesPage() {
 	const favorites: IRepo[] = useAppSelector(state => state.github.favorites); // returns favorite repos
@@ -14,11 +14,7 @@ export default function FavoritesPage() {
 
 	return (
 		<div className='max-w-[1400px] mx-auto px-4 mt-8'>
-			<ul className='list-none text-center space-y-4 my-4'>
-				{favorites.map((repo: IRepo, index: number) => {
-					return <FavoriteCard key={index} repo={repo} />;
-				})}
-			</ul>
+			<FavoriteList favorites={favorites} />
 		</div>
 	);
 }

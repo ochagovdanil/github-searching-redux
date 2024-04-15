@@ -1,5 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { IRepo, IUser, ServerResponse } from '../../models/models';
+import { ServerResponse } from '../../entities/server-response/ServerResponse';
+import { IUser } from '../../entities/user/User';
+import { IRepo } from '../../entities/repo/Repo';
 
 export const githubApi = createApi({
 	reducerPath: 'github/api', // Redux key
